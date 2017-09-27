@@ -17,6 +17,7 @@ import de.clearit.test.data.LocatorTyp;
 import de.clearit.test.exceptions.DriverNotSetException;
 import de.clearit.test.framework.DriverInjectable;
 import de.clearit.test.framework.WinPropertyManager;
+import de.clearit.test.helper.WinDriverUtils;
 import io.appium.java_client.windows.WindowsDriver;
 
 /**
@@ -161,37 +162,36 @@ public class WinBaseElement implements DriverInjectable {
 		checkElement();
 	}
 
-	// TODO
-	// /**
-	// * waitForEnable
-	// * <p>
-	// *
-	// * Wait for element is enable.
-	// */
-	// public void waitForEnable() {
-	// waitForPresent();
-	// Long timeout = timeOutInSeconds;
-	// final WebDriverWait wait = new WebDriverWait(driver, timeout);
-	// wait.until(ExpectedConditions.elementToBeClickable("", ""));
-	// }
+	/**
+	 * waitForEnable
+	 * <p>
+	 *
+	 * Wait for element is enable.
+	 */
+	public void waitForEnable() {
+		waitForPresent();
+		Long timeout = timeOutInSeconds;
+		final WebDriverWait wait = new WebDriverWait(driver, timeout);
+		wait.until(ExpectedConditions.elementToBeClickable(element));
+	}
 
-	// /**
-	// * waitForDisable
-	// *
-	// * Warten bis Element deaktiviert wird.
-	// *
-	// */
-	// public void waitForDisable() {
-	// waitForPresent();
-	// WinDriverUtils.waitForDisable(driver, element);
-	// }
+	/**
+	 * waitForDisable
+	 *
+	 * Warten bis Element deaktiviert wird.
+	 *
+	 */
+	public void waitForDisable() {
+		waitForPresent();
+		WinDriverUtils.waitForDisable(driver, element);
+	}
 
 	/**
 	 * Das Element betätigen.
 	 */
 	public void click() {
 		checkElement();
-		// waitForVisible();
+		waitForVisible();
 		element.click();
 	}
 
@@ -204,7 +204,7 @@ public class WinBaseElement implements DriverInjectable {
 	public void sendkeys(final CharSequence... text) {
 		if (text != null) {
 			checkElement();
-			// waitForVisible();
+			waitForVisible();
 			element.sendKeys(text);
 		}
 	}
@@ -238,7 +238,7 @@ public class WinBaseElement implements DriverInjectable {
 	 */
 	public void typeSlowWithoutClear(final String text, int sleepInMillis) {
 		long time = System.currentTimeMillis();
-		// waitForEnable();
+		waitForEnable();
 		for (String s : text.split("")) {
 			element = findElement();
 			element.sendKeys(s);
@@ -273,7 +273,7 @@ public class WinBaseElement implements DriverInjectable {
 	 */
 	private void typeSlowWithClearAndWithWaitForPage(final String text, int sleepInMillis, boolean waitForPageLoaded,
 			int waitForPageLoadedSeconds) {
-		// waitForEnable();
+		waitForEnable();
 		element.click();
 		clearInput();
 		TestUtils.sleep(sleepInMillis);
@@ -342,7 +342,7 @@ public class WinBaseElement implements DriverInjectable {
 	 */
 	public String getValue() {
 		checkElement();
-		// waitForVisible();
+		waitForVisible();
 		return element.getAttribute("value");
 	}
 
@@ -400,7 +400,7 @@ public class WinBaseElement implements DriverInjectable {
 	 */
 	public boolean isEnabled() {
 		checkElement();
-		// waitForVisible();
+		waitForVisible();
 		return element.isEnabled();
 	}
 
@@ -496,15 +496,7 @@ public class WinBaseElement implements DriverInjectable {
 		if (driver == null) {
 			throw new DriverNotSetException();
 		}
-		// TODO
-		// final WebDriverWait wait = new WebDriverWait(driver,
-		// timeOutInSeconds);
-		// try {
-		// wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
-		// } catch (TimeoutException timeoutException) {
-		// String message = erzeugeErrorMessageFuerElementNichtGefunden();
-		// throw new RuntimeException(message, timeoutException);
-		// }
+
 		if (element == null) {
 			findAndSetElement();
 		}
